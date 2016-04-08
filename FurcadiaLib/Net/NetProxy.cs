@@ -20,11 +20,16 @@ using Furcadia.IO;
 using System.Net.NetworkInformation;
 
 using System.Timers;
-/// using System.Timers.Timer;
+
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Authentication;
+
 
 namespace Furcadia.Net
 {
 	
+
 	public class NetProxy
 	{
 

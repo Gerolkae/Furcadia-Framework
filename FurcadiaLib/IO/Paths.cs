@@ -50,7 +50,8 @@ namespace Furcadia.IO
                 _FurcadiaCharactersPath = path;
                 return _FurcadiaCharactersPath;
             }
-            throw new DirectoryNotFoundException("Furcadia Characters path not found.\n" + path);
+            return null;
+          //  throw new DirectoryNotFoundException("Furcadia Characters path not found.\n" + path);
         }
 
 
@@ -74,7 +75,8 @@ namespace Furcadia.IO
 				_FurcadiaDocpath = path;
 				return _FurcadiaDocpath;
 			}
-			throw new DirectoryNotFoundException("Furcadia documents path not found.\n" + path);
+			return null;
+			//throw new DirectoryNotFoundException("Furcadia documents path not found.\n" + path);
 		}
 
 		/// <summary>
@@ -86,7 +88,8 @@ namespace Furcadia.IO
 		/// </returns>
 		public  string GetRegistryPath()
 		{
-            if (OSBitness.Is64BitOperatingSystem())
+             if( 8 == IntPtr.Size 
+        || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
 			{
 				return @"SOFTWARE\Wow6432Node\Dragon's Eye Productions\Furcadia\";
 			}
@@ -95,16 +98,16 @@ namespace Furcadia.IO
 				return @"SOFTWARE\Dragon's Eye Productions\Furcadia\";
 			}
 		}
+static string ProgramFilesx86()
+{
+    if( 8 == IntPtr.Size 
+        || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
+    {
+        return Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+    }
 
-		public string ProgramFilesx86()
-		{
-            if (OSBitness.Is64BitOperatingSystem())
-			{
-				return Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-			}
-
-			return Environment.GetEnvironmentVariable("ProgramFiles");
-		}
+    return Environment.GetEnvironmentVariable("ProgramFiles");
+}
 
         //public  string InstallPath
         //{
@@ -161,7 +164,8 @@ namespace Furcadia.IO
 				return _installpath; // Path found
 			}
 			// All options were exhausted - assume Furcadia not installed.
-			throw new DirectoryNotFoundException("Furcadia Install path not found." + "\n" + path);
+			return null;
+			//throw new DirectoryNotFoundException("Furcadia Install path not found." + "\n" + path);
 		}
 
 		private  string _defaultpatchpath;
@@ -213,7 +217,8 @@ namespace Furcadia.IO
 			}
 
 			// All options were exhausted - assume Furcadia not installed.
-			throw new DirectoryNotFoundException("Furcadia Install path not found.");
+			return null;
+			//throw new DirectoryNotFoundException("Furcadia Install path not found.");
 		}
 
 		private  string _localsettingspath;
@@ -301,87 +306,6 @@ namespace Furcadia.IO
 
 	}
 
-    #region "MSPL Code"
-    // Source: http://1code.codeplex.com/SourceControl/changeset/view/39074#842775
-    //**************************************************************************\
-    //        * Portions of this source are subject to the Microsoft Public License.
-    //        * See http://www.microsoft.com/opensource/licenses.mspx#Ms-PL.
-    //        * All other rights reserved.
-    //        * 
-    //        * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
-    //        * EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED 
-    //        * WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
-    //        \**************************************************************************
 
-
-    public sealed class OSBitness
-    {
-        public OSBitness()
-        {
-        }
-        #region "Is64BitOperatingSystem (IsWow64Process)"
-
-        /// <summary>
-        /// The function determines whether the current operating system is a 
-        /// 64-bit operating system.
-        /// </summary>
-        /// <returns>
-        /// The function returns true if the operating system is 64-bit; 
-        /// otherwise, it returns false.
-        /// </returns>
-        public static bool Is64BitOperatingSystem()
-        {
-            if (IntPtr.Size == 8)
-            {
-                // 64-bit programs run only on Win64
-                return true;
-            }
-            else
-            {
-                // 32-bit programs run on both 32-bit and 64-bit Windows
-                // Detect whether the current process is a 32-bit process 
-                // running on a 64-bit system.
-                bool flag = false;
-                return ((DoesWin32MethodExist("kernel32.dll", "IsWow64Process") && IsWow64Process(GetCurrentProcess(), ref flag)) && flag);
-            }
-        }
-
-        /// <summary>
-        /// The function determins whether a method exists in the export 
-        /// table of a certain module.
-        /// </summary>
-        /// <param name="moduleName">The name of the module</param>
-        /// <param name="methodName">The name of the method</param>
-        /// <returns>
-        /// The function returns true if the method specified by methodName 
-        /// exists in the export table of the module specified by moduleName.
-        /// </returns>
-        private static bool DoesWin32MethodExist(string moduleName, string methodName)
-        {
-            IntPtr moduleHandle = GetModuleHandle(moduleName);
-            if (moduleHandle == IntPtr.Zero)
-            {
-                return false;
-            }
-            return (GetProcAddress(moduleHandle, methodName) != IntPtr.Zero);
-        }
-
-        [DllImport("kernel32.dll")]
-        private static extern IntPtr GetCurrentProcess();
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr GetModuleHandle(string moduleName);
-
-        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)]
-string procName);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IsWow64Process(IntPtr hProcess, ref bool wow64Process);
-
-        #endregion
-    }
-    #endregion
 
 }
