@@ -115,6 +115,8 @@
     <Compile Include="FurcMap\MapPosition.cs" />
     <Compile Include="FurcMap\MapTile.cs" />
     <Compile Include="Net\NetConnection.cs" />
+    <Compile Include="Net\NetWeb.cs" />
+    <Compile Include="Net\ServerParse.cs" />
     <Compile Include="Net\SSL_TLS\SecureConnectionResults.cs" />
     <Compile Include="Net\SSL_TLS\SSLProxy" />
     <Compile Include="Net\SSL_TLS\Class3.cs" />
