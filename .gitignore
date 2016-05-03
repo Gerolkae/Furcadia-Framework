@@ -22,4 +22,4 @@
 bin/
 obj/
 build/
-Thumbs.db
+/SRC
