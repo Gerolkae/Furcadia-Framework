@@ -42,6 +42,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NoWin32Manifest>False</NoWin32Manifest>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,12 +82,6 @@
     <Compile Include="Demo\IDemo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FurcadiaLib\FurcadiaLib.csproj">
-      <Project>{156C2AF0-3DA8-4D8C-A525-5400185579B3}</Project>
-      <Name>FurcadiaLib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -118,6 +114,12 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FurcLib\FurcadiaLib.csproj">
+      <Project>{156C2AF0-3DA8-4D8C-A525-5400185579B3}</Project>
+      <Name>FurcadiaLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -138,12 +140,4 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
-  <PropertyGroup>
-    <PostBuildEvent>REM DEL old files
-del "$(SolutionDir)\SRC\$(TargetDir)$(TargetName)_$(PlatformName)_Binaries.rar"
-REM Create the BIN rar
-cd $(TargetDir)
-"c:/program files/winrar/rar.exe" a -r -x*.tmp "$(TargetDir)$(TargetName)_$(PlatformName)_Binaries.rar" *.*
-move "$(TargetDir)$(TargetName)_$(PlatformName)_Binaries.rar" "$(SolutionDir)\SRC\"</PostBuildEvent>
-  </PropertyGroup>
 </Project>
